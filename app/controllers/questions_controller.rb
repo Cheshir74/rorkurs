@@ -16,7 +16,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.create(question_params)
+    @question = Question.new(question_params)
 
     if @question.save
       redirect_to @question
@@ -41,7 +41,6 @@ class QuestionsController < ApplicationController
 
 
   private
-
   def load_question
     @question = Question.find(params[:id])
   end
