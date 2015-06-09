@@ -33,6 +33,7 @@ class QuestionsController < ApplicationController
       render :edit
     end
   end
+  
   def destroy
     @question.destroy
     redirect_to question_path
