@@ -16,9 +16,6 @@ RSpec.describe AnswersController, type: :controller do
         end
      end
     context 'invalid attibutes' do
-      it 'not change' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer)}.to_not change(question.answers, :count)
-      end
       it 'not create answer' do
         expect { post :create, question_id: question, answer: attributes_for(:invalid_answer)}.to_not change(Answer, :count)
       end
