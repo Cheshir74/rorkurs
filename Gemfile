@@ -29,6 +29,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 gem 'slim-rails'
+gem 'devise'
+
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -38,6 +40,8 @@ group :test, :development do
 end
 group :test do
 	gem 'shoulda-matchers'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 group :development, :test do

@@ -30,7 +30,9 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to render_template :show
     end
   end
+
   describe 'GET #new' do
+    sign_in_user
     before { get :new }
 
     it 'assigns a new Question to @question' do
@@ -42,6 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
     end   
   end
   describe 'GET #edit' do
+    sign_in_user
     before { get :edit, id: question}
 
     it 'assigns the requested question to @question' do
@@ -53,6 +56,7 @@ RSpec.describe QuestionsController, type: :controller do
     end 
   end
   describe 'POST #create' do
+    sign_in_user
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
@@ -75,4 +79,23 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end 
   end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+    
+    it 'delete question' do
+      @question = create(:question, user: subject.current_user)
+      expect {delete :destroy, id: @question}.to change(subject.current_user.questions, :count).by(-1)
+    end
+    
+    it 'delete other question' do
+      question.user = create(:user)
+      expect {delete :destroy, id: question}.to_not change(Question, :count)
+    end
+    
+    it 'redirect to index view' do
+      delete :destroy, id: question
+      expect(response).to redirect_to questions_path
+    end
+  end  
 end

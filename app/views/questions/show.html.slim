@@ -9,6 +9,9 @@ br
     .row
       .col-md-4.col-md-offset-4(style="border: 1px solid black; border-radius: 5px; margin-top: 5px; padding: 7px;" )
         = answer.body
+        
+        - if current_user && current_user.id == answer.user_id
+          p = link_to "Delete answer", [@question, answer], method: :delete
 br
 
 .row
@@ -27,3 +30,6 @@ br
 br
 .row
   = link_to 'Посмотреть все вопросы', questions_path
+  br
+  - if current_user && current_user.id == @question.user_id
+    = link_to "Delete question", question_path(@question), method: :delete
