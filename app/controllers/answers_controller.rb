@@ -12,7 +12,7 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
-    current_user.answers<<@answer
+    @answer.user = current_user
     if @answer.save
       redirect_to @question
     else

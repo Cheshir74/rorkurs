@@ -14,7 +14,7 @@ feature 'Create new answer', %q{
     click_on 'Добавить комментарий'
 
     expect(current_path).to eq question_path(question)
-    #expect(page).to have_content 'Your answer successfully created.' /#{user.answers.last.messsage}/
+    expect(page).to have_text 'Test answer'
    end
    scenario 'unautentificated user create answer' do
     visit question_path(question)

@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-
+  let(:user) { create(:user) }
+  let(:question) { create :question, user: user }
   describe 'GET #new' do
     sign_in_user
     before do
-      @question = create(:question)
-      get :new, question_id: @question.id
+      question
+      get :new, question_id: question.id
     end
     it 'assign new answer for @answers' do
       expect(assigns(:answer)).to be_a_new(Answer)
@@ -19,11 +20,11 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
-    let(:question) { create(:question) }
-    let(:answer) { create(:answer, question: question) }
+    let(:question) { create :question, user: user }
+    let(:answer) { create(:answer, question: question, user: user) }
     context 'valid attributes' do
       it 'saved answer in db' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer)}.to change(question.answers, :count).by(1)
+        expect { post :create, question_id: question, user: user, answer: attributes_for(:answer)}.to change(question.answers, :count).by(1)
       end
       
       it 'redirect to question' do
@@ -44,7 +45,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do    
     sign_in_user
-    let(:question) { create(:question) }
+    let(:question) { create :question, user: user }
     let(:answer) { create(:answer, question: question, user: subject.current_user) }
         
     it 'delete answer' do
@@ -53,7 +54,7 @@ RSpec.describe AnswersController, type: :controller do
     end
     
     it 'delete other answer' do
-      @answer = create(:answer, question: question)
+      @answer = create(:answer, question: question, user: user)
       expect {delete :destroy, question_id: question, id: @answer}.to_not change(Answer, :count)
     end
     

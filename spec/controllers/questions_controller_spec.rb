@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
-  describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
-    before do
-      get :index
 
-    end
+  let(:user) { create(:user) }
+  let(:question) { create :question, user: user }
+  
+  describe 'GET #index' do
+    let(:questions) { create_list(:question, 2, user: user) }    
+
+    before { get :index }
+
     it 'populates an array af all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end

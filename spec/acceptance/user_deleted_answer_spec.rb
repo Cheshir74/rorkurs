@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Delete answer' do 
   given(:user) { create :user }
+  given(:otheruser) { create :user }
   given(:question) { create :question, user: user}
 
   scenario 'autheticated user delete answer' do
@@ -17,9 +18,9 @@ feature 'Delete answer' do
   end
 
   scenario 'autheticated user try delete answer other user' do
-    sign_in(user)
+    sign_in(otheruser)
 
-    @answer = create :answer, question: question
+    @answer = create :answer, question: question, user: user
     visit question_path(question)
     expect(page).to have_no_link 'Delete answer'
 

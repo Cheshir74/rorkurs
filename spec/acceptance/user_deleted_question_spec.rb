@@ -4,6 +4,7 @@ feature 'Delete question' do
  
   
   given(:user) { create :user }
+  given(:otheruser) { create :user }
   given(:question) { create :question, user: user}
   scenario 'authenticated user delete question' do
 
@@ -18,9 +19,9 @@ feature 'Delete question' do
   
   scenario 'authenticated user try delete question  other user' do
 
-    sign_in(user)
+    sign_in(otheruser)
     
-    @question = create :question 
+    @question = create :question, user: user
     visit question_path(@question)
     expect(page).to have_no_link 'Delete question'
   end
