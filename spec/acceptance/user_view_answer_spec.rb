@@ -8,7 +8,7 @@ feature 'View question and answers' do
   scenario 'All can view question and answers' do
     visit question_path(question)
     answers
-    
+    expect(answers.count).to eq(3)
     question.answers.each do |answer|
       expect(page).to have_text answer.body
     end
