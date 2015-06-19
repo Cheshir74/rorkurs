@@ -4,9 +4,9 @@ feature 'Create new answer', %q{
   Only an authenticated user can answer
 } do 
   given(:user) { create(:user) }
-  given(:question) { create :question, user: user }
+  given!(:question) { create :question, user: user }
 
-  scenario 'authenticated user create answer' do
+  scenario 'authenticated user create answer', js: true do
     sign_in(user)
 
     visit question_path(question)
@@ -14,7 +14,9 @@ feature 'Create new answer', %q{
     click_on 'Добавить комментарий'
 
     expect(current_path).to eq question_path(question)
-    expect(page).to have_text 'Test answer'
+    within '.answers' do
+      expect(page).to have_text 'Test answer'
+    end
    end
    scenario 'unautentificated user create answer' do
     visit question_path(question)

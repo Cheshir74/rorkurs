@@ -24,20 +24,20 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { create(:answer, question: question, user: user) }
     context 'valid attributes' do
       it 'saved answer in db' do
-        expect { post :create, question_id: question, user: user, answer: attributes_for(:answer)}.to change(question.answers, :count).by(1)
+        expect { post :create, question_id: question, user: user, answer: attributes_for(:answer), format: :js }.to change(question.answers, :count).by(1)
       end
       
-      it 'redirect to question' do
-        post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to question_path(question)
+      it 'render create template' do
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :create
       end
     end
     context 'invalid attibutes' do
       it 'not create answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer)}.to_not change(Answer, :count)
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
       it 're-render question with answers' do
-        post :create, answer: attributes_for(:invalid_answer), question_id: question
+        post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js
         expect(response).to render_template 'questions/show'
       end
     end  
