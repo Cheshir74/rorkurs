@@ -5,8 +5,9 @@ p
 br
 
 .answers
-  = render 'answers'
-  br
+  - @question.answers.each do |answer|
+    = render partial: 'answers', locals: {answer: answer}
+br
 
 .row
   .col-md-4.col-md-offset-4
