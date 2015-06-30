@@ -18,9 +18,18 @@ feature 'Create new answer', %q{
       expect(page).to have_text 'Test answer'
     end
    end
-   scenario 'unautentificated user create answer' do
+  scenario 'unautentificated user create answer' do
     visit question_path(question)
 
     expect(page).to have_no_link 'Create answer on question'
+  end
+  scenario 'User try to create invalid answer', js: true do
+    sign_in(user)
+
+    visit question_path(question)
+
+    click_on 'Добавить комментарий'
+
+    expect(page).to have_content "Body can't be blank"
   end
  end

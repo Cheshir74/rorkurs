@@ -10,7 +10,7 @@ feature 'Delete answer' do
 
     @answer = create :answer, user: user, question: question
     visit question_path(question)
-    click_on 'Delete answer'
+    click_on 'Delete'
     expect(page).to_not have_text @answer.body
     expect(current_path).to eq question_path(question)
     
@@ -22,12 +22,12 @@ feature 'Delete answer' do
 
     @answer = create :answer, question: question, user: user
     visit question_path(question)
-    expect(page).to have_no_link 'Delete answer'
+    expect(page).to have_no_link 'Delete'
 
   end
   scenario 'Guest try delete answer' do
 
     visit question_path(question)
-    expect(page).to have_no_link 'Delete answer'
+    expect(page).to have_no_link 'Delete'
   end
 end

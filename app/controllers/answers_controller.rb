@@ -11,10 +11,9 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.create(answer_params)
     @answer.user = current_user
     unless @answer.save
-       render 'questions/show'
     end
   end
 

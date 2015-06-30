@@ -6,22 +6,23 @@ br
 
 .answers
   - @question.answers.each do |answer|
-    = render partial: 'answers', locals: {answer: answer}
+    = render partial: 'questions/answers', locals: {answer: answer}
 br
 
 .row
   .col-md-4.col-md-offset-4
+
     - if @answer
-      - @answer.errors.full_messages.each do |msg|
-        p(style="color: red;" )
-          = msg
-    = form_for [@question, Answer.new], remote:true do |f|
-      h4 Добавить ответ
-      .form-group
-        = f.label :body, "Напишите свой ответ"
-        = f.text_area :body, class: 'form-control'
-      .form-group
-        = f.submit 'Добавить комментарий', class: 'btn btn-primary btn-sm'
+
+    = form_for [@question, Answer.new], remote: true do |f|
+
+        h4 Добавить ответ
+        .form-group
+          = f.label :body, "Напишите свой ответ"
+          .answer-errors
+          = f.text_area :body, class: 'form-control'
+          .form-group
+            = f.submit 'Добавить комментарий', class: 'btn btn-primary btn-sm'
 br
 .row
   = link_to 'Посмотреть все вопросы', questions_path
