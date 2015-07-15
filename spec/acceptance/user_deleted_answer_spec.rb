@@ -5,7 +5,7 @@ feature 'Delete answer' do
   given(:otheruser) { create :user }
   given(:question) { create :question, user: user}
 
-  scenario 'autheticated user delete answer' do
+  scenario 'autheticated user delete answer', js: true do
     sign_in(user)
 
     @answer = create :answer, user: user, question: question
@@ -17,7 +17,7 @@ feature 'Delete answer' do
 
   end
 
-  scenario 'autheticated user try delete answer other user' do
+  scenario 'autheticated user try delete answer other user', js: true do
     sign_in(otheruser)
 
     @answer = create :answer, question: question, user: user
@@ -25,7 +25,7 @@ feature 'Delete answer' do
     expect(page).to have_no_link 'Delete'
 
   end
-  scenario 'Guest try delete answer' do
+  scenario 'Guest try delete answer', js: true do
 
     visit question_path(question)
     expect(page).to have_no_link 'Delete'

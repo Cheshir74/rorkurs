@@ -4,10 +4,22 @@ FactoryGirl.define do
   end
 
   factory :answer do
-    body 
+    body
+    user
+    question
+    best 'false'
   end
+
+  factory :best_answer, class: Answer do
+    body
+    user
+    question
+    best 'true'
+  end
+
   factory :invalid_answer, class: Answer do
-  body nil
+    body nil
+    question
   end
 
 end

@@ -1,0 +1,19 @@
+.row
+  .col-md-4.col-md-offset-3
+    h3
+      = @question.title
+    p
+      = @question.body
+      - if current_user && current_user.id == @question.user_id
+        p = link_to 'Edit question', '', class: 'edit-question-link', remote: true
+        p = link_to 'Delete question', question_path(@question), method: :delete, data: { confirm: 'Delete this answer?' }, remote: true
+        p = form_for @question, remote: true, html: { id: "edit-question" } do |f|
+          = f.label :title, "Заголовок"
+          br
+          = f.text_area :title
+          br
+          = f.label :body, "Ваш вопрос"
+          br
+          = f.text_area :body
+          br
+          = f.submit 'Save'

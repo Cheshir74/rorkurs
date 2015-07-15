@@ -6,7 +6,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create :question, user: user }
   
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2, user: user) }    
+    let(:questions) {create_list(:question, 2, user: user) }
 
     before { get :index }
 
@@ -45,18 +45,36 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to render_template :new
     end   
   end
-  describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, id: question}
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
+  describe 'GET #update' do
+
+    let(:otheruser){create(:user)}
+
+    it 'Question owner edit question' do
+      sign_in(user)
+      patch :update, id: question, question: {title:'New title question', body:'New body question'}, format: :js
+      question.reload
+      expect(question.title).to eq 'New title question'
+      expect(question.body).to eq 'New body question'
     end
 
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end 
+    it 'Other user edit question' do
+      sign_in(otheruser)
+      patch :update, id: question, question: {title:'New title question', body:'New body question'}, format: :js
+      question.reload
+      expect(question.title).to_not eq 'New title question'
+      expect(question.body).to_not eq 'New body question'
+    end
+
+    it 'Guest edit question' do
+      patch :update, id: question, question: {title:'New title question', body:'New body question'}, format: :js
+      question.reload
+      expect(question.title).to_not eq 'New title question'
+      expect(question.body).to_not eq 'New body question'
+    end
+
   end
+
   describe 'POST #create' do
     sign_in_user
     context 'with valid attributes' do

@@ -1,0 +1,19 @@
+- if answer.persisted?
+ .answer id = "answer-#{answer.id}"
+
+
+    .row
+      .col-md-4.col-md-offset-4(style="border: 1px solid black; border-radius: 5px; margin-top: 5px; padding: 7px;" )
+        p.best-answer
+          = render partial: 'answers/best_answer', locals: {answer: answer}
+        p.answer
+          = answer.body
+          - if current_user && current_user.id == answer.user_id
+            p = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+            p = link_to "Delete", [@question, answer], method: :delete, data: { confirm: 'Delete this answer?' }, remote: true
+            p = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+              = f.label :body, "Ваш ответ"
+              br
+              = f.text_area :body
+              br
+              = f.submit 'Save'
