@@ -4,4 +4,6 @@ class Question < ActiveRecord::Base
   belongs_to :user
   validates :title, :body, :user_id, presence: true
   validates :title, length: { in: 5..140 }
+
+  accepts_nested_attributes_for :attachments
 end
