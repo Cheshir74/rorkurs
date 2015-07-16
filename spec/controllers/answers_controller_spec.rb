@@ -5,10 +5,12 @@ RSpec.describe AnswersController, type: :controller do
   let!(:question) { create :question, user: user }
   describe 'GET #new' do
     sign_in_user
+
     before do
       question
       get :new, question_id: question.id
     end
+
     it 'assign new answer for @answers' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end

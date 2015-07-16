@@ -32,6 +32,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'slim-rails'
 gem 'devise'
 gem 'carrierwave'
+gem 'remotipart'
 
 
 # Use Capistrano for deployment

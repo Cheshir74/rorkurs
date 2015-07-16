@@ -13,13 +13,18 @@ br
 
     - if @answer
 
-    = form_for [@question, Answer.new], remote: true do |f|
+    = form_for [@question, @answer], remote: true do |f|
 
         h4 Добавить ответ
         .form-group
           = f.label :body, "Напишите свой ответ"
           .answer-errors
           = f.text_area :body, class: 'form-control'
+          p
+
+            = f.fields_for :attachments do |a|
+              = a.label :file
+              = a.file_field :file
           .form-group
             = f.submit 'Добавить комментарий', class: 'btn btn-primary btn-sm'
 br
