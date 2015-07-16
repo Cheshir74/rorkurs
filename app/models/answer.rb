@@ -6,9 +6,9 @@ class Answer < ActiveRecord::Base
   validates :body, length: { in: 5..140 }, presence: true
 
   def set_best
-    self.transaction do
-      self.question.answers.update_all(best: false)
-      self.update!(best: true)
+    transaction do
+      question.answers.update_all(best: false)
+      update!(best: true)
     end
   end
 end
