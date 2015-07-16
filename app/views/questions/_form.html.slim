@@ -5,5 +5,10 @@
     .field
       = f.label :body
       = f.text_area :body
+      p Attachments:
+      p
+        = f.fields_for :attachments do |a|
+          = a.label :file
+          = a.file_field :file
     .action
       = f.submit 'Create'

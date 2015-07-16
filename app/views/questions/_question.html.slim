@@ -4,9 +4,13 @@
       = @question.title
     p
       = @question.body
+    p Attachments:
+    ul
+      - @question.attachments.each do |a|
+        li = link_to a.file.identifier, a.file.url
       - if current_user && current_user.id == @question.user_id
         p = link_to 'Edit question', '', class: 'edit-question-link', remote: true
-        p = link_to 'Delete question', question_path(@question), method: :delete, data: { confirm: 'Delete this answer?' }, remote: true
+        p = link_to 'Delete question', question_path(@question), method: :delete, data: { confirm: 'Delete this question?' }, remote: true
         p = form_for @question, remote: true, html: { id: "edit-question" } do |f|
           = f.label :title, "Заголовок"
           br
