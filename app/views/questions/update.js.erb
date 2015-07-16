@@ -1,4 +1,4 @@
-$('.question').html('<%= j render @question, locals: {question: @question} %>');
+$('.question').html('<%= j render @question %>');
 $('.edit-question-link').click(function(e) {
   e.preventDefault();
   $(this).hide();

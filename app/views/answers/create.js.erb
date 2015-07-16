@@ -3,6 +3,6 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').append('<%= j render @answer, locals: {answer: @answer} %>');
+  $('.answers').append('<%= j render @answer %>');
   $('textarea, #answer_body').val('');
 <% end %>
