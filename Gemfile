@@ -31,6 +31,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'unicorn'
 gem 'slim-rails'
 gem 'devise'
+gem 'carrierwave'
 
 
 # Use Capistrano for deployment
