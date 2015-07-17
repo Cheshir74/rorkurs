@@ -20,11 +20,12 @@ br
           = f.label :body, "Напишите свой ответ"
           .answer-errors
           = f.text_area :body, class: 'form-control'
-          p
-
-            = f.fields_for :attachments do |a|
-              = a.label :file
-              = a.file_field :file
+          .attachment-answers
+            p
+              = f.fields_for :attachments do |a|
+                = render 'attachment_fields', :f => a
+              .links
+                = link_to_add_association 'add file', f, :attachments
           .form-group
             = f.submit 'Добавить комментарий', class: 'btn btn-primary btn-sm'
 br
