@@ -1,10 +1,9 @@
 FactoryGirl.define do
-  factory :vote_up do
-    vote '1'
+  factory :up_vote, class: 'Vote' do
+    value '1'
   end
 
-  factory :vote_down, class: 'Vote' do
-    vote '-1'
+  factory :down_vote, class: 'Vote' do
+    value '-1'
   end
-
 end
