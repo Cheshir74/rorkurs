@@ -13,6 +13,7 @@
             = link_to 'Remove file', attachment_path(a.id), method: :delete, data: { confirm: 'Delete this file?' }, remote: true
       .vote-question
         = render partial: 'votes/vote', locals: { votable: @question, type: 'question' }
+    .all-errors
       - if current_user && current_user.id == @question.user_id
         p = link_to 'Edit question', '', class: 'edit-question-link', remote: true
         p = link_to 'Delete question', question_path(@question), method: :delete, data: { confirm: 'Delete this question?' }, remote: true

@@ -10,7 +10,7 @@ class VotesController < ApplicationController
     if vote_empty?
       vote 1
     else
-      render json:'Your already vote.', status: :forribben
+      render json: ["Your already vote."], status: :forribben
     end
   end
 
@@ -18,17 +18,21 @@ class VotesController < ApplicationController
     if vote_empty?
       vote -1
     else
-      render json:'Your already vote.', status: :forbidden
+      render json: ["Your already vote."], status: :forbidden
     end
   end
 
   def vote_destroy
-    @vote = Vote.find_by(user_id: current_user.id, votable: @votable)
-    if @vote.user_id == current_user.id
-      @vote.destroy
-      render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
+    if vote_empty?
+      render json: ["Your not vote."], status: :forbidden
     else
-      render json:'Your not vote.', status: :forbidden
+      @vote = Vote.find_by(user_id: current_user.id, votable: @votable)
+      if @vote.user_id == current_user.id
+        @vote.destroy
+        render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
+      else
+        render json: ["Your not vote."], status: :forbidden
+      end
     end
   end
 
