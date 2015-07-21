@@ -12,12 +12,17 @@ RSpec.describe Question, type: :model do
 
   describe "#sum vote" do
     let (:user) {create(:user)}
+    let (:user1) {create(:user)}
+    let (:user2) {create(:user)}
+    let (:user3) {create(:user)}
     let (:question) {create(:question, user: user)}
-    let!(:up_list) {create_list(:up_vote, 5, votable: question)}
-    let!(:down_list) {create_list(:down_vote, 2, votable: question)}
+    let!(:up) {create(:up_vote, votable: question, user: user)}
+    let!(:down) {create(:down_vote, votable: question, user: user1)}
+    let!(:up2) {create(:up_vote, votable: question, user: user2)}
+    let!(:up3) {create(:up_vote, votable: question, user: user3)}
 
     it "sum votes  question " do
-      expect(question.count_votes).to eq 3
+      expect(question.count_votes).to eq 2
     end
   end
 end

@@ -7,18 +7,18 @@ class VotesController < ApplicationController
 
 
   def vote_up
-    if vote_empty
+    if vote_empty?
       vote 1
     else
-      render nothing: true, status: :forbidden
+      render json:'Your already vote.', status: :forribben
     end
   end
 
   def vote_down
-    if vote_empty
+    if vote_empty?
       vote -1
     else
-      render nothing: true, status: :forbidden
+      render json:'Your already vote.', status: :forbidden
     end
   end
 
@@ -28,7 +28,7 @@ class VotesController < ApplicationController
       @vote.destroy
       render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
     else
-      render nothing: true, status: :forbidden
+      render json:'Your not vote.', status: :forbidden
     end
   end
 
@@ -41,8 +41,8 @@ class VotesController < ApplicationController
     end
   end
 
-  def vote_empty
-    nil == Vote.find_by(user_id: current_user.id, votable: @votable)
+  def vote_empty?
+   Vote.find_by(user_id: current_user.id, votable: @votable).nil?
   end
 
 
