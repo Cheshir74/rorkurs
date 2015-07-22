@@ -14,6 +14,8 @@
                 li = link_to a.file.identifier, a.file.url
                 - if current_user && current_user.id == answer.user_id
                   = link_to 'Remove file', attachment_path(a), method: :delete, data: { confirm: 'Delete this file?' }, remote: true
+          .vote-answer
+             = render partial: 'votes/vote', locals: { votable: answer, type: 'answer' }
           - if current_user && current_user.id == answer.user_id
             p = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
             p = link_to "Delete", answer_path(answer), method: :delete, data: { confirm: 'Delete this answer?' }, remote: true
