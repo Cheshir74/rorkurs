@@ -16,6 +16,17 @@
                   = link_to 'Remove file', attachment_path(a), method: :delete, data: { confirm: 'Delete this file?' }, remote: true
           .vote-answer
              = render partial: 'votes/vote', locals: { votable: answer, type: 'answer' }
+          .comments
+            - if user_signed_in?
+             p = link_to 'Add comment', '', class: 'create-comment-link', data: {commentable_id: answer.id}
+            => 'Comments:'
+            - answer.comments.each do |c|
+             = render partial: 'comments/comment', locals: {comment: c}
+            .comment-errors
+            p = form_for [answer, Comment.new], method: "post", remote: true, html: {id: "create-comment-#{answer.id}"} do |f|
+             = f.label :body, "Comment"
+             p = f.text_area :body
+             = f.submit 'Create'
           - if current_user && current_user.id == answer.user_id
             p = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
             p = link_to "Delete", answer_path(answer), method: :delete, data: { confirm: 'Delete this answer?' }, remote: true

@@ -9,7 +9,10 @@ Rails.application.routes.draw do
     end
   end
   resources :questions, concerns: :votable do
+    resources :comments, :defaults => {commentable: 'question'}, only: [:create]
+
     resources :answers, concerns: :votable, shallow: true, only: [:new, :create, :destroy, :update] do
+      resources :comments, :defaults => {commentable: 'answer'}, only: [:create]
         post :set_best, on: :member
     end
   end

@@ -20,7 +20,7 @@ feature 'question edited' do
     scenario 'try to edit has question', js: true do
       click_on 'Edit question'
 
-      within '.question' do
+      within "#question-#{question.id}" do
         fill_in "Заголовок", with: 'edited question title'
         fill_in "Ваш вопрос", with: 'edited question'
 

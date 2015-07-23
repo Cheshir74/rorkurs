@@ -7,6 +7,7 @@ RSpec.describe Question, type: :model do
   it { should have_many :attachments }
   it { should have_many(:answers).dependent(:destroy).order('best DESC') }
   it { should validate_length_of(:title).is_at_least(5).is_at_most(140) }
+  it { should have_many :comments}
 
   it { should accept_nested_attributes_for :attachments }
 

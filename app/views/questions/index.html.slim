@@ -1,7 +1,6 @@
-- @questions.each do |question|
-   h4
-        = link_to question.title, question
-
+.questions
+  = render 'questions/questions'
 br
 
   = link_to 'Ask question', new_question_path
+= subscribe_to "/questions"

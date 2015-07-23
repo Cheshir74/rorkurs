@@ -34,6 +34,8 @@ gem 'devise'
 gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
+gem 'private_pub'
+gem 'thin'
 
 
 # Use Capistrano for deployment
