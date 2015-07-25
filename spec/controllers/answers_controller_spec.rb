@@ -3,22 +3,6 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let!(:question) { create :question, user: user }
-  describe 'GET #new' do
-    sign_in_user
-
-    before do
-      question
-      get :new, question_id: question.id
-    end
-
-    it 'assign new answer for @answers' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-    
-    it 'render a new view' do
-      expect(response).to render_template :new
-    end
-  end    
 
   describe 'POST #create' do
     sign_in_user
@@ -74,7 +58,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'changes answer attributes' do
-        patch :update, id: answer, question_id: question, answer: { body: 'new body'}, format: :js
+        patch :update, id: answer, question_id: question, user: subject.current_user, answer: { body: 'new body'}
         answer.reload
         expect(answer.body).to eq 'new body'
       end

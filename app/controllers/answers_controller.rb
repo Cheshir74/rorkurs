@@ -1,41 +1,25 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!
   before_action :load_question, only: [:create]
   before_action :load_answer, only: [:destroy, :update, :set_best]
-  def index
-    @answer = Answer.all
-  end
+  before_action :load_question_answer, only: [:update, :set_best]
 
-  def new
-    @answer = Answer.new
-  end
-
+  respond_to :js
   def set_best
-    if current_user.id == @answer.question.user_id
-      @question = @answer.question
-      @answer.set_best
-    end
+    respond_with(@answer.set_best) if current_user.id == @answer.question.user_id
   end
 
   def update
-    if current_user.id == @answer.user_id
-      @answer.update(answer_params)
-      @question = @answer.question
-    end
+    @answer.update(answer_params) if current_user.id == @answer.user_id
+    respond_with @answer
   end
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.create(answer_params)
-    @answer.user = current_user
-    unless @answer.save
-    end
+    respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def destroy
-    if current_user.id == @answer.user_id
-      @answer.destroy
-    end
+    respond_with(@answer.destroy) if current_user.id == @answer.user_id
   end
 
   private
@@ -46,6 +30,10 @@ class AnswersController < ApplicationController
 
   def load_question
     @question = Question.find(params[:question_id])
+  end
+
+  def load_question_answer
+    @question = @answer.question
   end
 
   def answer_params

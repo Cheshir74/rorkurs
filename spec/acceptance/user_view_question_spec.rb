@@ -5,8 +5,7 @@ feature 'View questions' do
   given!(:questions) { create_list(:question, 3, user: user) }
   
   scenario 'All can view questions' do
-    visit questions_path(questions)
-    
+    visit questions_path
     
     Question.find_each do |question|
       expect(page).to have_content question.title

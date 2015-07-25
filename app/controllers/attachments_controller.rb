@@ -2,10 +2,10 @@ class AttachmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :attachment_param
 
+  respond_to :js
+
   def destroy
-    if @attachment.attachmentable.user_id == current_user.id
-     @attachment.destroy
-    end
+    respond_with(@attachment.destroy) if @attachment.attachmentable.user_id == current_user.id
   end
 
   private

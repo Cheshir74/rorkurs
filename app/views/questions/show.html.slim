@@ -22,7 +22,7 @@ br
           = f.text_area :body, class: 'form-control'
           .attachment-answers
             p
-              = f.fields_for :attachments do |a|
+              = f.fields_for :attachments, @answer.attachments.build do |a|
                 = render 'attachment_fields', :f => a
               .links
                 = link_to_add_association 'add file', f, :attachments
