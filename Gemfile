@@ -37,7 +37,10 @@ gem 'cocoon'
 gem 'private_pub'
 gem 'thin'
 gem 'responders'
-
+gem 'omniauth'
+gem 'omniauth-vkontakte'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -45,6 +48,8 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'capybara-webkit'
+  gem 'letter_opener'
+  gem 'capybara-email'
 end
 group :test do
 	gem 'shoulda-matchers'
