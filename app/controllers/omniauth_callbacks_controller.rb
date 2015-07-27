@@ -1,27 +1,22 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :callback_hash
+  before_action :user_find, except:  :email_confirmation
 
   def vkontakte
-    @user = User.find_for_oauth(@hash)
     if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Vkontakte') if is_navigational_format?
+      sing_social(kind: 'Vkontakte')
     end
   end
 
   def facebook
-    @user = User.find_for_oauth(@hash)
     if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Facebook') if is_navigational_format?
+      sing_social(kind: 'Facebook')
     end
   end
 
   def twitter
-    @user = User.find_for_oauth(@hash)
     if @user and @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Twitter') if is_navigational_format?
+      sing_social(kind: 'Twitter')
     else
       @user = User.new
       session[:auth_provider] = @hash.provider
@@ -35,13 +30,20 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user.authorizations.build(provider: session[:auth_provider], uid: session[:auth_uid])
     @user.save
     if @user
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: 'Facebook') if is_navigational_format?
+      sing_social(kind: 'Twitter')
     end
   end
 
 
   private
+
+  def sing_social(kind)
+    sign_in_and_redirect @user, event: :authentication
+    set_flash_message(:notice, :success, kind) if is_navigational_format?
+  end
+  def user_find
+    @user = User.find_for_oauth(@hash)
+  end
 
   def user_params
     params.require(:user).permit(:email)

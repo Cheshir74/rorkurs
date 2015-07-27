@@ -2,10 +2,10 @@ class UsersController < ApplicationController
 
   def finish_signup
     @user = User.new
-    @provider = params[:provider]
-    @uid = params[:uid]
+    @provider = session['devise.oauth.provider']
+    @uid = session['devise.oauth.uid']
 
-    if request.post?
+    if request?
       @user = User.create(email: user_params[:email], password: user_params[:password], password_confirmation: user_params[:password_confirmation])
       if @user.persisted?
         @user.authorizations.create(provider: user_params[:provider], uid: user_params[:uid])

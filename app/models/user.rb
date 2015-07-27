@@ -35,13 +35,17 @@ class User < ActiveRecord::Base
     user
   end
 
+
+
+  def create_authorization(auth)
+    self.authorizations.create(provider: auth.provider, uid: auth.uid)
+  end
+
+  private
+
   def self.generate_user(email)
     password = Devise.friendly_token[0, 20]
     user = User.new(email: email, password: password, password_confirmation: password)
     user
-  end
-
-  def create_authorization(auth)
-    self.authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 end
