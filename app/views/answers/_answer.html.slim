@@ -12,12 +12,12 @@
             - answer.attachments.each do |a|
               .attachment id = "attachment-#{a.id}"
                 li = link_to a.file.identifier, a.file.url
-                - if current_user && current_user.id == answer.user_id
+                - if current_user && can?(:destroy, a)
                   = link_to 'Remove file', attachment_path(a), method: :delete, data: { confirm: 'Delete this file?' }, remote: true
           .vote-answer
              = render partial: 'votes/vote', locals: { votable: answer, type: 'answer' }
           .comments
-            - if user_signed_in?
+            - if can?(:create, Comment)
              p = link_to 'Add comment', '', class: 'create-comment-link', data: {commentable_id: answer.id}
             => 'Comments:'
             - answer.comments.each do |c|
@@ -27,7 +27,7 @@
              = f.label :body, "Comment"
              p = f.text_area :body
              = f.submit 'Create'
-          - if current_user && current_user.id == answer.user_id
+          - if can?(:crud, answer)
             p = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
             p = link_to "Delete", answer_path(answer), method: :delete, data: { confirm: 'Delete this answer?' }, remote: true
             p = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|

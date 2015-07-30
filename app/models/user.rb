@@ -41,6 +41,14 @@ class User < ActiveRecord::Base
     self.authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 
+  def own?(object)
+    id == object.user_id
+  end
+
+  def voted?(votable)
+    votes.where(votable: votable).first ? true : false
+  end
+
   private
 
   def self.generate_user(email)

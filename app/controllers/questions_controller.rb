@@ -6,7 +6,8 @@ class QuestionsController < ApplicationController
   after_action :publish_question, only: :create
 
   respond_to :html, :js
- 
+  authorize_resource
+
   def index
     respond_with(@questions = Question.all)
   end
@@ -35,7 +36,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    respond_with(@question.destroy) if current_user.id == @question.user_id
+    respond_with(@question.destroy)
   end
 
   private

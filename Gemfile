@@ -41,6 +41,7 @@ gem 'omniauth'
 gem 'omniauth-vkontakte'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
+gem 'cancancan'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

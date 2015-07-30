@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
   before_action :load_commentable
 
   respond_to :js
+  authorize_resource
 
   def create
     respond_with(@comment = current_user.comments.create(commentable: @commentable,  body: comment_params[:body]))

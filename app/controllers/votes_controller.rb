@@ -5,34 +5,25 @@ class VotesController < ApplicationController
 
   respond_to :json
 
-
   def vote_up
-    if vote_empty?
-      vote 1
-    else
-      render json: ["Your already vote."], status: :forribben
-    end
+    authorize! :vote_up, @votable
+    vote 1
+
   end
 
   def vote_down
-    if vote_empty?
-      vote -1
-    else
-      render json: ["Your already vote."], status: :forbidden
-    end
+    authorize! :vote_down, @votable
+    vote -1
   end
 
   def vote_destroy
-    if vote_empty?
-      render json: ["Your not vote."], status: :forbidden
+    authorize! :vote_destroy, @votable
+    @vote = Vote.find_by(user_id: current_user.id, votable: @votable)
+    if @vote.user_id == current_user.id
+      @vote.destroy
+      render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
     else
-      @vote = Vote.find_by(user_id: current_user.id, votable: @votable)
-      if @vote.user_id == current_user.id
-        @vote.destroy
-        render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
-      else
-        render json: ["Your not vote."], status: :forbidden
-      end
+      render json: ["Your not vote."], status: :forbidden
     end
   end
 
@@ -43,10 +34,6 @@ class VotesController < ApplicationController
     if @vote.save
       render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
     end
-  end
-
-  def vote_empty?
-   Vote.find_by(user_id: current_user.id, votable: @votable).nil?
   end
 
 
