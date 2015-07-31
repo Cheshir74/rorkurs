@@ -17,8 +17,8 @@ class VotesController < ApplicationController
   end
 
   def vote_destroy
-    authorize! :vote_destroy, @vote
     @vote = Vote.find_by(user_id: current_user.id, votable: @votable)
+    authorize! :vote_destroy, @vote
     @vote.destroy
     render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
 

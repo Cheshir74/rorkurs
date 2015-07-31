@@ -28,8 +28,8 @@ describe Ability do
     let(:answer3) { create(:answer, question: question2, user: otheruser)}
     let(:attachment) { create(:attachment, attachmentable: question) }
     let(:attachment2) { create(:attachment,  attachmentable: question2) }
-    let(:vote) { create(:vote, user: user, votable: question2) }
-    let(:vote2) { create(:vote, user: user, votable: question) }
+    let(:vote) { create(:up_vote, user: user, votable: question2) }
+    let(:vote2) { create(:up_vote, user: otheruser, votable: question2) }
 
     it { should_not be_able_to :manage, :all}
     it { should be_able_to :read, :all }
@@ -55,13 +55,13 @@ describe Ability do
     it { should be_able_to :vote_up, answer, user: user}
     it { should be_able_to :vote_down, question2, user: user}
     it { should be_able_to :vote_down, answer, user: user}
-    it { should be_able_to :vote_destroy, question2, user: user} #Не проходит. Не могу понять причину.
+    it { should be_able_to :vote_destroy, vote, user: user}
 
     it { should_not be_able_to :vote_up, question, user: user}
     it { should_not be_able_to :vote_up, answer2, user: user}
     it { should_not be_able_to :vote_down, question, user: user}
     it { should_not be_able_to :vote_down, answer2, user: user}
-    it { should_not be_able_to :vote_destroy, question, user: user}
+    it { should_not be_able_to :vote_destroy, vote2, user: user}
 
 
     it { should be_able_to :destroy, attachment,  user: user}
