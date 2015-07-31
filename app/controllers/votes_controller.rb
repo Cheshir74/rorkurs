@@ -17,14 +17,11 @@ class VotesController < ApplicationController
   end
 
   def vote_destroy
-    authorize! :vote_destroy, @votable
+    authorize! :vote_destroy, @vote
     @vote = Vote.find_by(user_id: current_user.id, votable: @votable)
-    if @vote.user_id == current_user.id
-      @vote.destroy
-      render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
-    else
-      render json: ["Your not vote."], status: :forbidden
-    end
+    @vote.destroy
+    render json: { count_votes: @vote.votable.count_votes, votable_type: @vote.votable_type, votable_id: @vote.votable_id }
+
   end
 
   private

@@ -29,8 +29,8 @@ class Ability
     can [:vote_up, :vote_down], [Question, Answer] do |votable|
       votable.user != user && !user.voted?(votable)
     end
-    can :vote_destroy, [Question, Answer] do |votable|
-      votable.user != user && user.voted?(votable)
+    can :vote_destroy, Vote do |vote|
+      vote.user == user
     end
     can :manage, Attachment do |attachment|
       user.own?(attachment.attachmentable)
