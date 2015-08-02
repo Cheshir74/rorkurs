@@ -14,14 +14,19 @@ class Ability
 
   def guest_abilities
     can :read, :all
+
   end
 
   def admin_abilities
     can :manage, :all
+
   end
 
   def user_abilities
     guest_abilities
+    can :manage, :profiles
+    can :manage, :questions
+    can :manage, :questions
 
     alias_action :create, :read, :update, :destroy, :to => :crud
     can :crud, [Question, Answer], user: user
@@ -38,6 +43,10 @@ class Ability
     can :set_best, Answer do |answer|
       user.own?(answer.question)
     end
+
+
+
+
 
   end
 

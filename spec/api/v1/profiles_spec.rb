@@ -65,16 +65,21 @@ describe 'Profile API' do
         expect(response).to be_success
       end
 
+      it 'returns list of users where not authorized user' do
+        expect(response.body).to have_json_size(5).at_path("profiles")
+      end
+
 
       %w(id email created_at updated_at admin).each do |attr|
         it "contains #{attr} all users" do
-          expect(response.body).to be_json_eql(users.to_json)
+          user = users.first
+          expect(response.body).to be_json_eql(user.send(attr.to_sym).to_json).at_path("profiles/0/#{attr}")
         end
       end
 
       %w(password encrypted_password).each do |attr|
         it "does not contain #{attr} all users" do
-          expect(response.body).to_not have_json_path(attr)
+          expect(response.body).to_not have_json_path("profiles/0/#{attr}")
         end
       end
 
