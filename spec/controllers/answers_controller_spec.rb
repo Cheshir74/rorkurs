@@ -8,22 +8,26 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
 
     let(:answer) { create(:answer, question: question, user: user) }
+
     context 'valid attributes' do
+      let(:request) { post :create, question_id: question, user: user, answer: attributes_for(:answer), format: :js }
       it 'saved answer in db' do
-        expect { post :create, question_id: question, user: user, answer: attributes_for(:answer), format: :js }.to change(question.answers, :count).by(1)
+        expect { request }.to change(question.answers, :count).by(1)
       end
       
       it 'render create template' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        request
         expect(response).to render_template :create
       end
     end
+
     context 'invalid attibutes' do
+      let(:request) {post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }
       it 'not create answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
+        expect { request }.to_not change(Answer, :count)
       end
       it 're-render question with answers' do
-        post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js
+        request
         expect(response).to render_template :create
       end
     end  
@@ -31,7 +35,6 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do    
     sign_in_user
-
     let(:answer) { create(:answer, question: question, user: subject.current_user) }
         
     it 'delete answer' do
@@ -52,6 +55,7 @@ RSpec.describe AnswersController, type: :controller do
 
     let!(:answer) { create(:answer, question: question, user: subject.current_user) }
     context 'valid attributes' do
+      let(:request) { patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js }
       it 'assings the requested answer to @answer' do
         patch :update, id: answer, question_id: question, user: subject.current_user, answer: attributes_for(:answer), format: :js
         expect(assigns(:answer)).to eq answer
@@ -64,12 +68,12 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'assigns th question' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        request
         expect(assigns(:question)).to eq question
       end
 
       it 'render update template to the updated question' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        request
         expect(response).to render_template :update
       end
     end
@@ -78,12 +82,9 @@ RSpec.describe AnswersController, type: :controller do
       before { patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js }
 
       it 'does not saves specified answer with received attributes' do
-
         answer.reload
         expect(answer.body).to_not eq attributes_for(:invalid_question)[:body]
-
         expect(answer.body).to eq answer.body
-
       end
 
       it 'rerenders edit page' do

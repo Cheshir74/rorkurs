@@ -119,29 +119,28 @@ RSpec.describe VotesController, type: :controller do
 
 
   describe "POST #vote-destroy" do
+    let(:request_destroy) { post :vote_destroy, question_id: question.id, id: question, votable: question, format: :json }
 
     context "user cancel vote " do
 
       before do
         sign_in(create(:user))
       end
+      let(:request) { post :vote_down, question_id: question.id, id: question, votable: question, format: :json }
 
       it "for the question" do
-
-        post :vote_down, question_id: question.id, id: question, votable: question, format: :json
-        expect {post :vote_destroy, question_id: question.id, id: question,
-                     votable: question, format: :json}.to change {question.votes.count}.by(-1)
+        request
+        expect {request_destroy}.to change {question.votes.count}.by(-1)
       end
 
       it "for the answer" do
-
         post :vote_up, answer_id: answer.id, id: answer, votable: answer, format: :json
         expect {post :vote_destroy, answer_id: answer.id, id: answer,
                      votable: answer, format: :json}.to change {answer.votes.count}.by(-1)
       end
 
       it "send OK to client from server" do
-        post :vote_down, question_id: question.id, id: question, votable: question, format: :json
+        request
         expect(response).to have_http_status(200)
       end
     end
@@ -150,8 +149,7 @@ RSpec.describe VotesController, type: :controller do
 
       it "try to vote cancel" do
         post :vote_up, answer_id: answer.id, id: answer, votable: answer, format: :json
-        expect {post :vote_destroy, question_id: question.id, id: question,
-                     votable: question, format: :json}.to_not change(Vote, :count)
+        expect {request_destroy}.to_not change(Vote, :count)
       end
 
       it "send to client from server" do
@@ -164,17 +162,17 @@ RSpec.describe VotesController, type: :controller do
 
       before do
         sign_in(user)
+        post :vote_up, answer_id: answer.id, id: answer, votable: answer, format: :json
       end
 
+
+
       it "author can not do it" do
-        post :vote_up, answer_id: answer.id, id: answer, votable: answer, format: :json
-        expect {post :vote_destroy, question_id: question.id, id: question,
-                     votable: question, format: :json}.to_not change(Vote, :count)
+        expect {request_destroy}.to_not change(Vote, :count)
       end
 
       it "send to client from server" do
-        post :vote_up, answer_id: answer.id, id: answer, votable: answer, format: :json
-        post :vote_destroy, question_id: question.id, id: question, votable: question, format: :json
+        request_destroy
         expect(response).to have_http_status(403)
       end
     end

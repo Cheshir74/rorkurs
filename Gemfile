@@ -51,6 +51,7 @@ gem 'oj_mimic_json'
 # gem 'capistrano-rails', group: :development
 group :test, :development do
   gem 'rspec-rails'
+  gem 'rspec-its'
   gem 'factory_girl_rails'
   gem 'capybara-webkit'
   gem 'letter_opener'

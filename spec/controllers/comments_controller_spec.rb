@@ -6,11 +6,9 @@ RSpec.describe CommentsController, type: :controller do
   let!(:answer)    { create(:answer, question: question, user: user) }
   let!(:comment)   { create(:comment, user: user) }
 
-
   describe "POST #create" do
 
     context "User create comment" do
-
       sign_in_user
 
       it "for question" do
@@ -27,7 +25,6 @@ RSpec.describe CommentsController, type: :controller do
       end
     end
 
-
     context "Guest can not create comment" do
 
       it "try to save comment" do
@@ -38,10 +35,6 @@ RSpec.describe CommentsController, type: :controller do
         post :create, question_id: question, comment: attributes_for(:comment), format: :js
         expect(response).to have_http_status(401)
       end
-
-
     end
-
   end
-
 end

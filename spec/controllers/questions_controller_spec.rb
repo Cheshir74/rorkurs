@@ -60,15 +60,15 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'Other user edit question' do
       sign_in(otheruser)
-      patch :update, id: question, question: {title:'New title question', body:'New body question'}, format: :js
-      question.reload
-      expect(question.title).to_not eq 'New title question'
-      expect(question.body).to_not eq 'New body question'
+      update_expect
     end
 
     it 'Guest edit question' do
+      update_expect
+    end
+
+    def update_expect
       patch :update, id: question, question: {title:'New title question', body:'New body question'}, format: :js
-      question.reload
       expect(question.title).to_not eq 'New title question'
       expect(question.body).to_not eq 'New body question'
     end
@@ -77,25 +77,30 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
+    let(:request) { post :create, question: attributes_for(:question) }
+    let(:invalid_params) { post :create, question: attributes_for(:invalid_question) }
+
     context 'with valid attributes' do
+      it_behaves_like 'Private Pub publish'
+
       it 'saves the new question in the database' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect { request }.to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do
-        post :create, question: attributes_for(:question)
+        request
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
+
     context 'with invalid attributes' do
       it 'does not save the question' do
-       expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
-
+       expect { invalid_params }.to_not change(Question, :count)
       end
-      it 're-renders new view' do
-        post :create, question: attributes_for(:invalid_question)
-        expect(response).to render_template :new
 
+      it 're-renders new view' do
+        invalid_params
+        expect(response).to render_template :new
       end
     end 
   end
