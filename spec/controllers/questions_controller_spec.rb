@@ -79,9 +79,9 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
     let(:request) { post :create, question: attributes_for(:question) }
     let(:invalid_params) { post :create, question: attributes_for(:invalid_question) }
+    subject { create(:question, user: user)}
 
     context 'with valid attributes' do
-      it_behaves_like 'Private Pub publish'
 
       it 'saves the new question in the database' do
         expect { request }.to change(Question, :count).by(1)
@@ -102,7 +102,22 @@ RSpec.describe QuestionsController, type: :controller do
         invalid_params
         expect(response).to render_template :new
       end
-    end 
+    end
+
+    it 'should publish to PrivatePub' do
+      expect(PrivatePub).to receive(:publish_to).with('/questions', anything)
+      request
+    end
+
+   # it 'test should publish to PrivatePub' do
+   #   allow(PrivatePub).to receive(:publish_to).and_return(subject.to_json)
+   #   expect{ subject.save! }.to receive(:publish_to).with('/questions', anything)
+   # end
+
+    it 'should not publish to PrivatePub, params invalid' do
+      expect(PrivatePub).to_not receive(:publish_to)
+      invalid_params
+    end
   end
 
   describe 'DELETE #destroy' do
