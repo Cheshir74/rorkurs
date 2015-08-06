@@ -76,11 +76,12 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    sign_in_user
+    before do
+      sign_in(user)
+    end
     let(:request) { post :create, question: attributes_for(:question) }
     let(:invalid_params) { post :create, question: attributes_for(:invalid_question) }
-    subject { create(:question, user: user)}
-    let(:question1) {build(:question, user: user)}
+    let!(:question1) {create(:question, user: user)}
 
     context 'with valid attributes' do
 
@@ -106,14 +107,16 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     it 'should publish to PrivatePub' do
+
       expect(PrivatePub).to receive(:publish_to).with('/questions', anything)
       request
     end
 
-   # it 'test should publish to PrivatePub' do
-   #   allow(PrivatePub).to receive(:publish_to).and_return(question1.to_json)
-   #   expect{  }.to receive(:publish_to).with('/questions', anything)
-   # end
+    it 'test should publish to PrivatePub' do
+      allow(Question).to receive(:new).and_return(question1)
+      expect(PrivatePub).to receive(:publish_to).with('/questions', question: question1.to_json)
+      request
+    end
 
     it 'should not publish to PrivatePub, params invalid' do
       expect(PrivatePub).to_not receive(:publish_to)
