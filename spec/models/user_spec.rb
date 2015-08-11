@@ -5,6 +5,7 @@ RSpec.describe User do
   it { should validate_presence_of :password }
   it { should have_many :votes}
   it { should have_many :comments}
+  it { should have_many(:subscribers).dependent(:destroy) }
 
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
@@ -63,6 +64,14 @@ RSpec.describe User do
         expect(authorization.provider).to eq auth.provider
         expect(authorization.uid).to eq auth.uid
       end
+    end
+  end
+  describe '.send_daily_digest' do
+    let(:users) { create_list(:user, 2) }
+
+    it 'should send daily digest to all users' do
+      users.each { |user| expect(DailyMailer).to receive(:digest).with(user).and_call_original }
+      User.send_daily_digest
     end
   end
 end

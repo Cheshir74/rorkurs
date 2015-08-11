@@ -35,4 +35,26 @@ RSpec.describe Answer, type: :model do
     end
   end
 
+  describe '.send_notification_answer_new' do
+    let(:owner_question) { create(:user) }
+    let(:user) { create(:user) }
+    let!(:question) {create(:question, user: owner_question) }
+    let(:answer) { create(:answer, question: question, user: user)}
+
+    subject { build(:answer, question: question) }
+
+    it 'should not call notification job after update' do
+      subject.save!
+      expect(AnswerNew).to_not receive(:notification)
+      subject.touch
+    end
+
+    it 'should send notification new answer for owner question' do
+      expect(AnswerNew).to receive(:notification).with(question.user).and_call_original
+      #Answer.send_notification(question.user)
+      answer
+    end
+
+  end
+
 end

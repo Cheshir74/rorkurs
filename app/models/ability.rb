@@ -43,9 +43,9 @@ class Ability
       user.own?(answer.question)
     end
 
-
-
-
+    can :create, Subscriber do |subscriber|
+      !user.subscribers.where(question_id:subscriber.question).present?
+    end
 
   end
 

@@ -67,5 +67,7 @@ describe Ability do
     it { should be_able_to :destroy, attachment,  user: user}
     it { should_not be_able_to :destroy, attachment2,  user: user}
 
+    it { should be_able_to :create, Subscriber }
+
   end
 end

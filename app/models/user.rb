@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :authorizations
+  has_many :subscribers, dependent: :destroy
   accepts_nested_attributes_for :authorizations
 
   def self.find_for_oauth(auth)
@@ -35,7 +36,11 @@ class User < ActiveRecord::Base
     user
   end
 
-
+  def self.send_daily_digest
+    find_each.each do |user|
+      DailyMailer.digest(user).deliver_later
+    end
+  end
 
   def create_authorization(auth)
     self.authorizations.create(provider: auth.provider, uid: auth.uid)

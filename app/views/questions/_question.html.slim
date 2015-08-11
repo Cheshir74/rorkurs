@@ -18,6 +18,8 @@
       - if can?(:update, @question)
         p = link_to 'Edit question', '', class: 'edit-question-link', remote: true
         p = link_to 'Delete question', question_path(@question), method: :delete, data: { confirm: 'Delete this question?' }
+      .subscribe
+        = render 'subscribers/subscriber'
       .comments
         - if can?(:create, Comment)
           p = link_to 'Add comment', '', class: 'create-comment-link', data: {commentable_id: @question.id}

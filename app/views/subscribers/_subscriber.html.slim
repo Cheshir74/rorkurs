@@ -1,0 +1,2 @@
+- if can?(:create, Subscriber.new(question: @question))
+  p = link_to 'Subscribe', question_subscribers_path(@question), class: 'btn btn-primary btn-sm', method: :post, remote: true
