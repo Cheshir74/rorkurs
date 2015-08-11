@@ -2,6 +2,8 @@ class Question < ActiveRecord::Base
   include Votable
   include Commentable
 
+  scope :new_questions, -> { where("created_at >= ?", Time.zone.now.beginning_of_day) }
+
   has_many :answers, -> { order('best DESC') }, dependent: :destroy
   has_many :attachments, as: :attachmentable, dependent: :destroy
   belongs_to :user
