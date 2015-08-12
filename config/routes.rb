@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'search', to: 'search#index'
   resources :attachments, only: :destroy
 
   namespace :api do

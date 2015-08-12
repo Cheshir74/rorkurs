@@ -1,0 +1,6 @@
+.form-search
+  = form_tag search_path, method: 'get'
+    .form-group
+      = text_field_tag :query, params[:query]
+      = select_tag "type", options_for_select(["All", "Questions", "Answers", "Users", "Comments"])
+      = submit_tag 'Search', class: 'btn btn-default'
