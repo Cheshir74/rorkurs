@@ -50,8 +50,9 @@ RSpec.describe Answer, type: :model do
     end
 
     it 'should send notification new answer for owner question' do
-      expect(AnswerNew).to receive(:notification).with(question.user).and_call_original
+      expect(NotificationJob).to receive(:perform_later).with(question).and_call_original
       #Answer.send_notification(question.user)
+
       answer
     end
 

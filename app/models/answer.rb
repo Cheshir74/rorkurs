@@ -11,6 +11,7 @@ class Answer < ActiveRecord::Base
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   after_create :jobs_notif
+
   def set_best
     transaction do
       question.answers.update_all(best: false)
@@ -19,14 +20,7 @@ class Answer < ActiveRecord::Base
   end
 
   def jobs_notif
-    NotificationJob.perform_now(question)
-  end
-
-  def self.send_notification(question)
-    AnswerNew.notification(question.user).deliver_later
-    question.subscribers.find_each.each do |subscriber|
-      AnswerNew.notification(subscriber).deliver_later
-    end
+    NotificationJob.perform_later(question)
   end
 
 end
