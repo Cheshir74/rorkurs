@@ -7,14 +7,8 @@ class SearchController < ApplicationController
 
     if type_search == 'All'
       @results = ThinkingSphinx.search(search)
-    elsif type_search == 'Questions'
-      @results = Question.search(search)
-    elsif type_search == 'Answers'
-      @results = Answer.search(search)
-    elsif type_search == 'Comments'
-      @results = Comment.search(search)
-    elsif type_search == 'Users'
-      @results = User.search(search)
+    else
+      @results = type_search.constantize.search(search)
     end
   end
 end

@@ -1,6 +1,6 @@
 .result
   ol
-    - if @results.any?
+    - if @results
       - @results.each do |result|
         li
           = render :partial => "search/#{result.class.name.downcase}", locals: {result: result}
