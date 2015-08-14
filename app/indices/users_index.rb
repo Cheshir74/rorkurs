@@ -4,6 +4,6 @@ ThinkingSphinx::Index.define :user, with: :active_record do
 
   #attributes
 
-  has id, created_at, updated_at
+  has created_at, updated_at
 
 end
