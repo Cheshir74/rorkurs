@@ -11,6 +11,14 @@ module Rorkurs
     # Use the responders controller from the responders gem
     config.app_generators.scaffold_controller :responders_controller
 
+    # Load defaults from config/*.env in config
+    Dotenv.load *Dir.glob(Rails.root.join("config/**/*.env"), File::FNM_DOTMATCH)
+
+    # Override any existing variables if an environment-specific file exists
+    Dotenv.overload *Dir.glob(Rails.root.join("config/**/*.env.#{Rails.env}"), File::FNM_DOTMATCH)
+
+
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
